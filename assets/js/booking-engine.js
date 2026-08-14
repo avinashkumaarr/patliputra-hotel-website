@@ -98,24 +98,11 @@ const BookingEngine = {
 
         <div class="room-card-body">
           <div class="room-card-header">
-            <span class="room-category-label">${room.category}</span>
             <h3 class="room-title">${room.name}</h3>
+            <p class="room-meta-sub" style="color: var(--color-text-muted); font-size: 0.88rem; margin: 4px 0 10px 0;">
+              <strong>${room.sizeSqFt} sq ft</strong> &bull; ${room.bedType.split(' ')[0]} Bed &bull; Up to ${room.maxGuests} guests
+            </p>
             <p class="room-tagline">${room.tagline}</p>
-          </div>
-
-          <div class="room-specs-strip">
-            <div class="room-spec-item">
-              <i class="fa-solid fa-vector-square"></i>
-              <span><strong>${room.sizeSqFt}</strong> Sq Ft</span>
-            </div>
-            <div class="room-spec-item">
-              <i class="fa-solid fa-bed"></i>
-              <span><strong>${room.bedType.split(' ')[0]}</strong> Bed</span>
-            </div>
-            <div class="room-spec-item">
-              <i class="fa-solid fa-users"></i>
-              <span>Up to <strong>${room.maxGuests}</strong> Guests</span>
-            </div>
           </div>
 
           <div class="room-features-list">
@@ -126,17 +113,17 @@ const BookingEngine = {
 
           <div class="room-card-footer">
             <div class="room-pricing">
-              <span class="room-price-label">Starting From</span>
+              <span class="room-price-label">Official Starting Rate*</span>
               <span class="room-price-val">${this.formatPrice(room.basePriceINR)}</span>
               <span class="room-price-unit">per night (excl. taxes)</span>
             </div>
 
             <div class="room-card-actions">
               <button class="btn btn-outline-gold btn-sm" onclick="BookingEngine.openRoomDetails('${room.id}')">
-                Details
+                Explore Room &rarr;
               </button>
               <button class="btn btn-gold btn-sm" onclick="BookingEngine.selectRoomForBooking('${room.id}')">
-                Book Now
+                Check Availability &rarr;
               </button>
             </div>
           </div>
@@ -156,58 +143,40 @@ const BookingEngine = {
     if (!modal || !modalBody) return;
 
     const basePriceFormatted = this.formatPrice(room.basePriceINR);
-    const bfastPriceFormatted = this.formatPrice(room.basePriceINR + room.breakfastAddonINR);
 
     modalBody.innerHTML = `
-      <div class="room-modal-header-top mb-3">
-        <span class="badge-gold">${room.category}</span>
-        <h2 class="mt-2 mb-1">${room.name}</h2>
-        <p class="lead" style="color: var(--color-text-muted);">${room.tagline}</p>
-      </div>
-
-      <div class="room-modal-gallery">
-        <div class="room-modal-main-img" onclick="GalleryModal.openLightbox('${room.image}', '${room.name}')" style="cursor: pointer;">
-          <img src="${room.image}" alt="${room.name}">
-        </div>
-        <div class="room-modal-thumbs">
-          ${(room.gallery || [room.image]).slice(1, 3).map((img, idx) => `
-            <div class="room-modal-thumb" onclick="GalleryModal.openLightbox('${img}', '${room.name} - View ${idx+2}')">
-              <img src="${img}" alt="${room.name} gallery">
-            </div>
-          `).join('')}
+      <div class="room-modal-hero mb-3">
+        <div class="room-modal-main-img" style="height: 300px; border-radius: var(--radius-md); overflow: hidden; cursor: pointer;" onclick="GalleryModal.openLightbox('${room.image}', '${room.name}')">
+          <img src="${room.image}" alt="${room.name}" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
       </div>
 
-      <div class="room-modal-desc mb-4">
-        <h4>About This Luxury Accommodation</h4>
-        <p>${room.description}</p>
-      </div>
-
-      <div class="room-specs-strip mb-4">
-        <div class="room-spec-item">
-          <i class="fa-solid fa-maximize"></i>
-          <span>Area: <strong>${room.sizeSqFt} Sq Ft</strong></span>
+      <div style="background: var(--color-surface-warm); padding: 14px 20px; border-radius: var(--radius-sm); border: 1px solid var(--color-border-solid); display: flex; justify-content: space-around; text-align: center; margin-bottom: 20px;">
+        <div>
+          <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--color-text-muted); display: block; letter-spacing: 0.08em;">Room Size</span>
+          <strong style="font-size: 1.1rem; color: var(--color-text-main);">${room.sizeSqFt} sq ft</strong>
         </div>
-        <div class="room-spec-item">
-          <i class="fa-solid fa-bed"></i>
-          <span>Bedding: <strong>${room.bedType}</strong></span>
+        <div style="border-left: 1px solid var(--color-border-solid); border-right: 1px solid var(--color-border-solid); padding: 0 20px;">
+          <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--color-text-muted); display: block; letter-spacing: 0.08em;">Bedding</span>
+          <strong style="font-size: 1.1rem; color: var(--color-text-main);">${room.bedType}</strong>
         </div>
-        <div class="room-spec-item">
-          <i class="fa-solid fa-mountain-sun"></i>
-          <span>View: <strong>${room.view}</strong></span>
-        </div>
-        <div class="room-spec-item">
-          <i class="fa-solid fa-user-group"></i>
-          <span>Occupancy: <strong>Max ${room.maxAdults} Adults, ${room.maxChildren} Child</strong></span>
+        <div>
+          <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--color-text-muted); display: block; letter-spacing: 0.08em;">Occupancy</span>
+          <strong style="font-size: 1.1rem; color: var(--color-text-main);">Up to ${room.maxGuests} Guests</strong>
         </div>
       </div>
 
       <div class="mb-4">
-        <h4>Included 5-Star Amenities & Conveniences</h4>
+        <h4 style="font-size: 1.15rem; margin-bottom: 8px; color: var(--color-text-main);">Room Overview</h4>
+        <p style="color: var(--color-text-muted); line-height: 1.7; font-size: 0.95rem;">${room.description}</p>
+      </div>
+
+      <div class="mb-4">
+        <h4 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--color-text-main);">Amenities & Features</h4>
         <div class="room-amenities-matrix">
           ${room.amenities.map(amenity => `
             <div class="room-amenity-entry">
-              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-circle-check" style="color: var(--color-primary-gold);"></i>
               <span>${amenity}</span>
             </div>
           `).join('')}
@@ -215,37 +184,24 @@ const BookingEngine = {
       </div>
 
       <div class="mb-4">
-        <h4>Select Your Preferred Rate Plan</h4>
-        
-        <div class="rate-plan-card selected" id="plan-room-only" onclick="BookingEngine.toggleRatePlan('room_only')">
-          <div>
-            <div class="font-weight-bold" style="font-size: 1.05rem;">Best Flexible Rate (Room Only)</div>
-            <small style="color: var(--color-text-muted);">Free cancellation up to 24 hours prior to check-in. High-speed Wi-Fi included.</small>
-          </div>
-          <div class="text-right">
-            <div class="room-price-val">${basePriceFormatted}</div>
-            <small>/ night</small>
-          </div>
-        </div>
-
-        <div class="rate-plan-card" id="plan-breakfast" onclick="BookingEngine.toggleRatePlan('breakfast')">
-          <div>
-            <div class="font-weight-bold" style="font-size: 1.05rem;">Bed, Gourmet Breakfast & More</div>
-            <small style="color: var(--color-text-muted);">Includes full buffet breakfast at Saffron Restaurant, early check-in & late check-out upon availability.</small>
-          </div>
-          <div class="text-right">
-            <div class="room-price-val">${bfastPriceFormatted}</div>
-            <small>/ night</small>
-          </div>
+        <h4 style="font-size: 1.15rem; margin-bottom: 12px; color: var(--color-text-main);">Photo Gallery</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+          ${(room.gallery || [room.image]).map((img, idx) => `
+            <div style="height: 90px; border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; border: 1px solid var(--color-border-solid);" onclick="GalleryModal.openLightbox('${img}', '${room.name} - Photo ${idx+1}')">
+              <img src="${img}" alt="${room.name}" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          `).join('')}
         </div>
       </div>
 
-      <div class="modal-footer-action pt-3" style="border-top: 1px solid var(--color-border-solid); display: flex; justify-content: space-between; align-items: center;">
+      <div class="modal-footer-action pt-3" style="border-top: 1px solid var(--color-border-solid); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
         <div>
-          <small class="text-muted">Dates: <strong>${this.state.checkInDate} to ${this.state.checkOutDate}</strong> (${this.state.nights} night${this.state.nights > 1 ? 's' : ''})</small>
+          <span style="font-size: 0.75rem; color: var(--color-text-muted); display: block; text-transform: uppercase; letter-spacing: 0.08em;">Official Starting Rate*</span>
+          <strong style="font-size: 1.4rem; color: var(--color-primary-gold); font-family: var(--font-serif);">${basePriceFormatted}</strong>
+          <small style="color: var(--color-text-muted); font-size: 0.75rem;">/ night + taxes</small>
         </div>
         <button class="btn btn-gold btn-lg" onclick="BookingEngine.proceedToCheckoutFromModal('${room.id}')">
-          <i class="fa-solid fa-calendar-check"></i> Reserve This Suite
+          <i class="fa-solid fa-calendar-check"></i> Check Availability &rarr;
         </button>
       </div>
     `;

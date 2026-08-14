@@ -443,3 +443,126 @@
   font-size: 0.8rem;
   color: var(--color-text-light-muted);
 }
+
+/* ==========================================================================
+   Amenities & Services 3-Category Grid
+   ========================================================================== */
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+}
+
+.amenity-category-column {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-solid);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.amenity-category-column:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(197, 155, 39, 0.4);
+}
+
+.amenity-col-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-solid);
+  margin-bottom: 20px;
+}
+
+.amenity-col-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(197, 155, 39, 0.12);
+  color: var(--color-primary-gold);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.amenity-col-title {
+  font-size: 1.25rem;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.amenity-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.amenity-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+.amenity-item-row i {
+  color: var(--color-primary-gold);
+  font-size: 0.95rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   Floating WhatsApp Button Widget
+   ========================================================================== */
+.floating-whatsapp-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45);
+  z-index: 999;
+  transition: transform var(--transition-bounce), box-shadow var(--transition-fast);
+  text-decoration: none;
+}
+
+.floating-whatsapp-btn:hover {
+  transform: scale(1.1) translateY(-4px);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+  color: #ffffff;
+}
+
+.whatsapp-tooltip {
+  position: absolute;
+  right: 72px;
+  background: #0b0f17;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.floating-whatsapp-btn:hover .whatsapp-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+

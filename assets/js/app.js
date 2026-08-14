@@ -1,10 +1,7 @@
 /**
- * Hotel Patliputra Continental - Main Application Orchestrator
+ * Hotel Patliputra Continental - Master Application Script
+ * Orchestrates navigation, slideshow, direct WhatsApp channel, dining & wellness interactions.
  */
-
-document.addEventListener('DOMContentLoaded', () => {
-  App.init();
-});
 
 const App = {
   currentHeroIndex: 0,
@@ -16,23 +13,14 @@ const App = {
     this.initMobileDrawer();
     this.initCurrencySwitcher();
     this.renderDestinations();
-    this.renderOffers();
-    this.renderTestimonials();
+    this.renderAmenities();
     this.initNewsletter();
     this.initSmoothScroll();
-
-    // Initialize Submodules
-    if (window.GalleryModal) window.GalleryModal.init();
-    if (window.BookingEngine) window.BookingEngine.init();
-    if (window.DiningModule) window.DiningModule.init();
-    if (window.BanquetModule) window.BanquetModule.init();
-    if (window.SpaModule) window.SpaModule.bindEvents();
-
-    console.log("Hotel Patliputra Continental Luxury 5-Star Portal Initialized.");
+    this.initContactForms();
   },
 
   /* ==========================================================================
-     Hero Slideshow Logic
+     Hero Cover Slideshow & Motion Transitions
      ========================================================================== */
   initHeroSlider() {
     const slides = document.querySelectorAll('.hero-slide');
@@ -100,38 +88,46 @@ const App = {
      ========================================================================== */
   initNavbarScroll() {
     const header = document.querySelector('.main-header');
-    if (!header) return;
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
 
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 40) {
-        header.classList.add('scrolled');
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+
+      if (scrollY > 50) {
+        header?.classList.add('scrolled');
       } else {
-        header.classList.remove('scrolled');
+        header?.classList.remove('scrolled');
       }
 
-      // Active Section Scrollspy
-      const sections = document.querySelectorAll('section[id]');
-      const scrollY = window.pageYOffset + 120;
-
+      let currentSectionId = '';
       sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
         const sectionHeight = section.offsetHeight;
-        const sectionTop = section.offsetTop;
-        const sectionId = section.getAttribute('id');
-        const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-
-        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-          if (navLink) navLink.classList.add('active');
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          currentSectionId = section.getAttribute('id');
         }
       });
-    });
+
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === `#${currentSectionId}`) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   },
 
   /* ==========================================================================
-     Mobile Drawer Toggle
+     Mobile Drawer Navigation
      ========================================================================== */
   initMobileDrawer() {
-    const toggleBtn = document.getElementById('mobile-menu-toggle-btn');
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
     const drawer = document.getElementById('mobile-nav-drawer');
     const closeBtn = document.getElementById('mobile-drawer-close-btn');
 
@@ -155,7 +151,7 @@ const App = {
   },
 
   /* ==========================================================================
-     Currency Switcher
+     Currency Switcher (INR / USD)
      ========================================================================== */
   initCurrencySwitcher() {
     document.querySelectorAll('.currency-btn').forEach(btn => {
@@ -166,15 +162,69 @@ const App = {
         
         if (window.BookingEngine) {
           window.BookingEngine.setCurrency(curr);
-          window.BookingEngine.showToast(`Currency converted to ${curr === 'INR' ? 'Indian Rupee (₹)' : 'US Dollar ($)'}`, 'info');
+          window.BookingEngine.showToast(`Rates displayed in ${curr === 'INR' ? 'Indian Rupee (₹)' : 'US Dollar ($)'}`, 'info');
         }
       });
     });
   },
 
   /* ==========================================================================
-     Render Dynamic Content (Destinations, Offers, Reviews)
+     Render Dynamic Content (Amenities, Destinations)
      ========================================================================== */
+  renderAmenities() {
+    const container = document.getElementById('amenities-grid-container');
+    if (!container || !window.HOTEL_DATA?.amenitiesList) return;
+
+    const { hotelServices, roomComforts, bathroomAmenities } = window.HOTEL_DATA.amenitiesList;
+
+    container.innerHTML = `
+      <div class="amenity-category-column">
+        <div class="amenity-col-header">
+          <div class="amenity-col-icon"><i class="fa-solid fa-hotel"></i></div>
+          <h3 class="amenity-col-title">Hotel & Guest Services</h3>
+        </div>
+        <div class="amenity-items-list">
+          ${hotelServices.map(item => `
+            <div class="amenity-item-row">
+              <i class="fa-solid ${item.icon}"></i>
+              <span>${item.name}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="amenity-category-column">
+        <div class="amenity-col-header">
+          <div class="amenity-col-icon"><i class="fa-solid fa-bed"></i></div>
+          <h3 class="amenity-col-title">In-Room Comforts</h3>
+        </div>
+        <div class="amenity-items-list">
+          ${roomComforts.map(item => `
+            <div class="amenity-item-row">
+              <i class="fa-solid ${item.icon}"></i>
+              <span>${item.name}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="amenity-category-column">
+        <div class="amenity-col-header">
+          <div class="amenity-col-icon"><i class="fa-solid fa-bath"></i></div>
+          <h3 class="amenity-col-title">Bathroom Essentials</h3>
+        </div>
+        <div class="amenity-items-list">
+          ${bathroomAmenities.map(item => `
+            <div class="amenity-item-row">
+              <i class="fa-solid ${item.icon}"></i>
+              <span>${item.name}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  },
+
   renderDestinations() {
     const container = document.getElementById('destinations-grid-container');
     if (!container || !window.HOTEL_DATA) return;
@@ -195,64 +245,22 @@ const App = {
     `).join('');
   },
 
-  renderOffers() {
-    const container = document.getElementById('offers-grid-container');
-    if (!container || !window.HOTEL_DATA) return;
+  initContactForms() {
+    const contactForm = document.getElementById('contact-inquiry-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('contact-name')?.value || 'Guest';
+        const email = document.getElementById('contact-email')?.value || '';
+        const phone = document.getElementById('contact-phone')?.value || '';
+        const msg = document.getElementById('contact-message')?.value || '';
 
-    container.innerHTML = window.HOTEL_DATA.specialOffers.map(offer => `
-      <div class="offer-card">
-        <div>
-          <span class="offer-badge">${offer.badge}</span>
-          <h3 class="offer-title">${offer.title}</h3>
-          <p class="offer-desc">${offer.description}</p>
-        </div>
-
-        <div>
-          <div class="offer-code-box">
-            <span style="font-size: 0.8rem; color: var(--color-text-light-muted);">Use Promo Code:</span>
-            <span class="offer-code-val">${offer.code}</span>
-          </div>
-
-          <button class="btn btn-gold w-100" onclick="App.applyOfferCode('${offer.code}')" style="width: 100%;">
-            <i class="fa-solid fa-bolt"></i> Claim Offer Now
-          </button>
-        </div>
-      </div>
-    `).join('');
-  },
-
-  applyOfferCode(code) {
-    if (window.BookingEngine) {
-      window.BookingEngine.state.promoCode = code;
-      window.BookingEngine.applyPromoCode();
-      document.getElementById('rooms-section')?.scrollIntoView({ behavior: 'smooth' });
+        if (window.BookingEngine) {
+          window.BookingEngine.showToast(`Thank you, ${name}! Your inquiry has been sent to gm@hpcpatna.com. Our front desk will reach you shortly.`, 'success');
+        }
+        contactForm.reset();
+      });
     }
-  },
-
-  renderTestimonials() {
-    const container = document.getElementById('testimonials-grid-container');
-    if (!container || !window.HOTEL_DATA) return;
-
-    container.innerHTML = window.HOTEL_DATA.testimonials.map(t => `
-      <div class="testimonial-card">
-        <div>
-          <div class="testimonial-quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-          <div class="star-rating mb-2">
-            ${Array(t.rating).fill('<i class="fa-solid fa-star"></i>').join('')}
-          </div>
-          <h4 class="testimonial-title">${t.title}</h4>
-          <p class="testimonial-comment">"${t.comment}"</p>
-        </div>
-
-        <div class="testimonial-author-row">
-          <img src="${t.avatar}" alt="${t.guestName}" class="testimonial-avatar">
-          <div>
-            <div class="testimonial-author-name">${t.guestName}</div>
-            <div class="testimonial-author-role">${t.role}</div>
-          </div>
-        </div>
-      </div>
-    `).join('');
   },
 
   initNewsletter() {
@@ -263,7 +271,7 @@ const App = {
         const email = document.getElementById('newsletter-email-input')?.value;
         if (email) {
           if (window.BookingEngine) {
-            window.BookingEngine.showToast(`Thank you for subscribing! Exclusive 5-star offers sent to ${email}`, 'success');
+            window.BookingEngine.showToast(`Thank you for subscribing! Updates sent to ${email}`, 'success');
           }
           form.reset();
         }

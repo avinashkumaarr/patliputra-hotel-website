@@ -160,6 +160,10 @@
   .rooms-grid {
     grid-template-columns: 1fr;
   }
+  .about-grid, #contact-section .container > div:last-child {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
   .modal-container {
     max-height: 95vh;
   }
@@ -176,6 +180,13 @@
     height: 90px;
     flex: 1;
   }
+  .floating-whatsapp-btn {
+    width: 52px;
+    height: 52px;
+    font-size: 1.7rem;
+    bottom: 20px;
+    right: 20px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -190,5 +201,8 @@
   }
   .banquet-specs-grid {
     grid-template-columns: 1fr 1fr;
+  }
+  .amenities-grid {
+    grid-template-columns: 1fr;
   }
 }
