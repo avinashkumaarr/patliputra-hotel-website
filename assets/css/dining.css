@@ -1,0 +1,257 @@
+/**
+ * Hotel Patliputra Continental - Dining & Digital Gastronomy Styles
+ */
+
+.dining-venues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.dining-venue-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-solid);
+}
+
+.dining-venue-card.reversed {
+  direction: rtl;
+}
+
+.dining-venue-card.reversed > * {
+  direction: ltr;
+}
+
+.dining-venue-img-wrap {
+  position: relative;
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.dining-venue-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.dining-venue-card:hover .dining-venue-img {
+  transform: scale(1.05);
+}
+
+.dining-venue-content {
+  padding: 44px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dining-cuisine-tag {
+  font-family: var(--font-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-primary-gold);
+  margin-bottom: 8px;
+}
+
+.dining-venue-title {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  color: var(--color-text-main);
+}
+
+.dining-venue-desc {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  margin-bottom: 24px;
+}
+
+.dining-highlights-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.dining-highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.dining-highlight-item i {
+  color: var(--color-primary-gold);
+}
+
+.dining-meta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 14px 0;
+  border-top: 1px solid var(--color-border-solid);
+  border-bottom: 1px solid var(--color-border-solid);
+  margin-bottom: 28px;
+  font-size: 0.85rem;
+}
+
+.dining-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+}
+
+.dining-meta-item strong {
+  color: var(--color-text-main);
+}
+
+.dining-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Digital Interactive Menu Modal & Cards
+   ========================================================================== */
+.menu-category-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-solid);
+}
+
+.menu-category-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.diet-filter-toggles {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.diet-toggle-btn {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-solid);
+  background: var(--color-surface-warm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.diet-toggle-btn.active {
+  background: var(--color-surface-dark);
+  color: #fff;
+  border-color: var(--color-surface-dark);
+}
+
+.diet-toggle-btn.veg-active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.menu-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.menu-item-card {
+  background: var(--color-surface-warm);
+  border: 1px solid var(--color-border-solid);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all var(--transition-fast);
+}
+
+.menu-item-card:hover {
+  background: #ffffff;
+  border-color: var(--color-primary-gold);
+  box-shadow: var(--shadow-card);
+}
+
+.menu-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.menu-item-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diet-icon {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #10b981;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.diet-icon::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background-color: #10b981;
+  border-radius: 50%;
+}
+
+.diet-icon.non-veg {
+  border-color: #ef4444;
+}
+
+.diet-icon.non-veg::after {
+  background-color: #ef4444;
+}
+
+.menu-item-price {
+  font-family: var(--font-accent);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary-gold);
+  white-space: nowrap;
+}
+
+.menu-item-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}

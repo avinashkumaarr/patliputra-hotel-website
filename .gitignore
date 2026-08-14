@@ -1,0 +1,14 @@
+# System & Editor files
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Node
+node_modules/
+package-lock.json
+
+# Python cache
+__pycache__/
+*.pyc

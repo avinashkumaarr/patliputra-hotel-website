@@ -1,0 +1,194 @@
+/**
+ * Hotel Patliputra Continental - Responsive & Mobile Layout Adaptations
+ */
+
+/* ==========================================================================
+   Mobile Navigation Drawer
+   ========================================================================== */
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 100vh;
+  background: var(--color-surface-dark);
+  border-right: 1px solid var(--color-border-dark);
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.5);
+  z-index: 2800;
+  transform: translateX(-100%);
+  transition: transform var(--transition-bounce);
+  display: flex;
+  flex-direction: column;
+  padding: 30px 24px;
+}
+
+.mobile-nav-drawer.active {
+  transform: translateX(0);
+}
+
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-dark);
+}
+
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: auto;
+}
+
+.mobile-nav-link {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 0.08em;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mobile-nav-link:hover, .mobile-nav-link.active {
+  color: var(--color-primary-gold);
+}
+
+/* ==========================================================================
+   Media Queries
+   ========================================================================== */
+@media (max-width: 1240px) {
+  .nav-menu {
+    gap: 14px;
+    margin-left: 18px;
+  }
+  .nav-link {
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+  }
+  .booking-bar {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  .booking-bar .booking-action-btn {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 1060px) {
+  .nav-menu {
+    display: none;
+  }
+  .mobile-menu-toggle {
+    display: block;
+  }
+  .hero-section {
+    height: calc(100vh - 90px);
+    min-height: 540px;
+  }
+  .hero-nav-arrow {
+    display: none;
+  }
+  .booking-bar {
+    grid-template-columns: 1fr 1fr;
+  }
+  .booking-bar .booking-action-btn {
+    grid-column: span 2;
+  }
+  .dining-venue-card {
+    grid-template-columns: 1fr;
+  }
+  .dining-venue-img-wrap {
+    min-height: 280px;
+  }
+  .dining-venue-content {
+    padding: 30px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-logo-img {
+    height: 44px;
+    max-width: 140px;
+  }
+  .section-wrapper {
+    padding: 70px 0;
+  }
+  .top-bar-left {
+    display: none;
+  }
+  .top-bar-inner {
+    justify-content: center;
+  }
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  .hero-description {
+    font-size: 0.95rem;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+  .section-title {
+    font-size: 2rem;
+  }
+  .booking-engine-wrapper {
+    margin-top: -30px;
+  }
+  .booking-bar {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px;
+  }
+  .booking-field {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-solid);
+    padding-bottom: 10px;
+  }
+  .booking-bar .booking-action-btn {
+    grid-column: span 1;
+  }
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+  .modal-container {
+    max-height: 95vh;
+  }
+  .modal-body {
+    padding: 20px 16px;
+  }
+  .room-modal-gallery {
+    grid-template-columns: 1fr;
+  }
+  .room-modal-thumbs {
+    flex-direction: row;
+  }
+  .room-modal-thumb {
+    height: 90px;
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2.1rem;
+  }
+  .hero-description {
+    font-size: 0.95rem;
+  }
+  .room-specs-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+  .banquet-specs-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
