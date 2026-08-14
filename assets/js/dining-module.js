@@ -29,17 +29,16 @@ const DiningModule = {
     modalBody.innerHTML = `
       <div class="menu-modal-header mb-4 text-center">
         <span class="badge-gold">${restaurant.cuisineType}</span>
-        <h2 class="mt-2 mb-1">${restaurant.name} Digital Menu</h2>
-        <p style="color: var(--color-text-muted);">${restaurant.timings} | Location: <strong>${restaurant.location}</strong></p>
+        <h2 class="mt-2 mb-1" style="font-size: 1.8rem;">${restaurant.name} Digital Gastronomy</h2>
+        <p style="color: var(--color-text-muted); font-size: 0.88rem;">${restaurant.timings} | Location: <strong>${restaurant.location || 'Lobby Level'}</strong></p>
       </div>
 
       <div class="menu-category-filter">
         <div class="menu-category-tabs">
           <button class="tab-btn active menu-tab-btn" data-cat="all" onclick="DiningModule.setMenuCategory('all')">Full Menu</button>
-          <button class="tab-btn menu-tab-btn" data-cat="Chef Special" onclick="DiningModule.setMenuCategory('Chef Special')">Chef's Signatures</button>
-          <button class="tab-btn menu-tab-btn" data-cat="Starters" onclick="DiningModule.setMenuCategory('Starters')">Starters & Dim Sum</button>
+          <button class="tab-btn menu-tab-btn" data-cat="Starters" onclick="DiningModule.setMenuCategory('Starters')">Starters</button>
           <button class="tab-btn menu-tab-btn" data-cat="Mains" onclick="DiningModule.setMenuCategory('Mains')">Main Courses</button>
-          <button class="tab-btn menu-tab-btn" data-cat="Desserts" onclick="DiningModule.setMenuCategory('Desserts')">Desserts & Bakery</button>
+          <button class="tab-btn menu-tab-btn" data-cat="Desserts" onclick="DiningModule.setMenuCategory('Desserts')">Desserts & Delights</button>
           ${restaurant.id === 'coca-mocha' ? `<button class="tab-btn menu-tab-btn" data-cat="Beverages" onclick="DiningModule.setMenuCategory('Beverages')">Gourmet Coffees</button>` : ''}
         </div>
 
@@ -97,7 +96,7 @@ const DiningModule = {
           <p class="menu-item-desc">${item.description}</p>
         </div>
         <div style="margin-top: 12px; font-size: 0.75rem; color: var(--color-primary-gold); font-weight: 600;">
-          <i class="fa-solid fa-crown"></i> ${item.category}
+          <i class="fa-solid fa-utensils"></i> ${item.category}
         </div>
       </div>
     `).join('');
@@ -153,17 +152,16 @@ const DiningModule = {
     e.preventDefault();
     const venueId = document.getElementById('table-res-venue')?.value || 'saffron';
     const guestName = document.getElementById('table-res-name')?.value || 'Valued Guest';
-    const guests = document.getElementById('table-res-guests')?.value || '2';
+    const guests = document.getElementById('table-res-guests')?.value || '2 Guests';
     const date = document.getElementById('table-res-date')?.value || 'Today';
     const time = document.getElementById('table-res-time')?.value || '20:00';
-    const seating = document.getElementById('table-res-seating')?.value || 'Window View';
 
     const restaurant = window.HOTEL_DATA.dining.find(d => d.id === venueId);
     const venueName = restaurant ? restaurant.name : 'Saffron Restaurant';
 
     BookingEngine.closeModal('table-reservation-modal');
 
-    BookingEngine.showToast(`Table confirmed for ${guests} guests at ${venueName} on ${date} (${time})`, 'success');
+    BookingEngine.showToast(`Table confirmed for ${guests} at ${venueName} on ${date} (${time})`, 'success');
   },
 
   bindEvents() {

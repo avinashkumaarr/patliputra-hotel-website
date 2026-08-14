@@ -86,6 +86,14 @@ const BookingEngine = {
       );
     }
 
+    // Update active tab styling
+    document.querySelectorAll('.room-filter-tabs .tab-btn').forEach(btn => {
+      const text = btn.textContent.toLowerCase();
+      if (category === 'all' && text.includes('all')) btn.classList.add('active');
+      else if (category !== 'all' && text.includes(category.toLowerCase())) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+
     container.innerHTML = filteredRooms.map(room => `
       <div class="room-card" data-room-id="${room.id}">
         <div class="room-card-image-wrap" onclick="BookingEngine.openRoomDetails('${room.id}')">
@@ -143,6 +151,7 @@ const BookingEngine = {
     if (!modal || !modalBody) return;
 
     const basePriceFormatted = this.formatPrice(room.basePriceINR);
+    const bfastPriceFormatted = this.formatPrice(room.basePriceINR + room.breakfastAddonINR);
 
     modalBody.innerHTML = `
       <div class="room-modal-hero mb-3">
@@ -218,13 +227,6 @@ const BookingEngine = {
     }
   },
 
-  toggleRatePlan(planType) {
-    this.state.cart.ratePlan = planType;
-    document.querySelectorAll('.rate-plan-card').forEach(c => c.classList.remove('selected'));
-    const activePlan = document.getElementById(`plan-${planType.replace('_', '-')}`);
-    if (activePlan) activePlan.classList.add('selected');
-  },
-
   proceedToCheckoutFromModal(roomId) {
     this.closeModal('room-details-modal');
     this.selectRoomForBooking(roomId);
@@ -241,213 +243,226 @@ const BookingEngine = {
 
   openBookingDrawer() {
     const drawer = document.getElementById('booking-drawer');
-    if (drawer) {
-      drawer.classList.add('active');
-      document.body.style.overflow = 'hidden';
+    const overlay = document.getElementById('booking-drawer-overlay');
+    if (drawer) drawer.classList.add('active');
+    if (overlay) overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // If no room is selected yet, default to first room
+    if (!this.state.cart.room && window.HOTEL_DATA.rooms.length) {
+      this.state.cart.room = window.HOTEL_DATA.rooms[0];
     }
+    this.updateCartCalculation();
   },
 
   closeBookingDrawer() {
     const drawer = document.getElementById('booking-drawer');
-    if (drawer) {
-      drawer.classList.remove('active');
-      document.body.style.overflow = '';
+    const overlay = document.getElementById('booking-drawer-overlay');
+    if (drawer) drawer.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  },
+
+  // Guest counters
+  updateAdults(delta) {
+    this.state.adults = Math.max(1, Math.min(8, this.state.adults + delta));
+    this.renderGuestCountDisplay();
+  },
+
+  updateChildren(delta) {
+    this.state.children = Math.max(0, Math.min(6, this.state.children + delta));
+    this.renderGuestCountDisplay();
+  },
+
+  updateRoomsCount(delta) {
+    this.state.rooms = Math.max(1, Math.min(5, this.state.rooms + delta));
+    this.renderGuestCountDisplay();
+  },
+
+  updateGuestCount(type, delta) {
+    if (type === 'adults') this.updateAdults(delta);
+    else if (type === 'children') this.updateChildren(delta);
+    else if (type === 'rooms') this.updateRoomsCount(delta);
+  },
+
+  renderGuestCountDisplay() {
+    const summary = `${this.state.adults} Adult${this.state.adults > 1 ? 's' : ''}, ${this.state.children > 0 ? this.state.children + ' Child, ' : ''}${this.state.rooms} Room${this.state.rooms > 1 ? 's' : ''}`;
+    
+    const summaryEl = document.getElementById('guest-summary-text');
+    if (summaryEl) summaryEl.textContent = summary;
+
+    const adultEl = document.getElementById('adult-counter-val');
+    const childEl = document.getElementById('child-counter-val');
+    const roomEl = document.getElementById('room-counter-val');
+
+    if (adultEl) adultEl.textContent = this.state.adults;
+    if (childEl) childEl.textContent = this.state.children;
+    if (roomEl) roomEl.textContent = this.state.rooms;
+
+    const drawerGuestsVal = document.getElementById('drawer-guests-val');
+    if (drawerGuestsVal) drawerGuestsVal.textContent = summary;
+  },
+
+  // Add-on toggles
+  toggleAddOn(addonKey) {
+    if (this.state.cart.addOns.hasOwnProperty(addonKey)) {
+      this.state.cart.addOns[addonKey] = !this.state.cart.addOns[addonKey];
+      this.updateCartCalculation();
+    }
+  },
+
+  toggleAddon(addonKey) {
+    this.toggleAddOn(addonKey);
+  },
+
+  // Promo code
+  applyPromoCode(codeOverride = null) {
+    const promoInput = document.getElementById('booking-promo') || document.getElementById('drawer-promo-input');
+    const code = (codeOverride || (promoInput ? promoInput.value : '')).trim().toUpperCase();
+
+    const messageEl = document.getElementById('promo-applied-message');
+
+    if (code === 'ROYAL10') {
+      this.state.promoCode = 'ROYAL10';
+      this.state.discountPercent = 10;
+      if (messageEl) {
+        messageEl.style.color = 'var(--color-success)';
+        messageEl.textContent = 'Promo ROYAL10 applied (10% Off!)';
+      }
+      this.showToast('Promo code ROYAL10 applied (10% Discount)!', 'success');
+    } else if (code === 'HONEYMOON') {
+      this.state.promoCode = 'HONEYMOON';
+      this.state.discountPercent = 15;
+      if (messageEl) {
+        messageEl.style.color = 'var(--color-success)';
+        messageEl.textContent = 'Promo HONEYMOON applied (15% Off!)';
+      }
+      this.showToast('Promo code HONEYMOON applied (15% Discount)!', 'success');
+    } else if (code === 'SPA20') {
+      this.state.promoCode = 'SPA20';
+      this.state.discountPercent = 12;
+      if (messageEl) {
+        messageEl.style.color = 'var(--color-success)';
+        messageEl.textContent = 'Promo SPA20 applied (12% Off!)';
+      }
+      this.showToast('Promo code SPA20 applied (12% Discount)!', 'success');
+    } else if (code === '') {
+      this.state.promoCode = '';
+      this.state.discountPercent = 0;
+      if (messageEl) messageEl.textContent = '';
+    } else {
+      this.state.discountPercent = 0;
+      if (messageEl) {
+        messageEl.style.color = 'var(--color-danger)';
+        messageEl.textContent = 'Invalid promo code. Try ROYAL10 or HONEYMOON.';
+      }
+      this.showToast('Invalid promo code. Try ROYAL10', 'warning');
+    }
+
+    this.updateCartCalculation();
+  },
+
+  applyPromoCodeFromDrawer() {
+    const input = document.getElementById('drawer-promo-input');
+    if (input) {
+      this.applyPromoCode(input.value);
     }
   },
 
   updateCartCalculation() {
-    const cart = this.state.cart;
-    if (!cart.room) return;
+    const room = this.state.cart.room;
+    const detailsContainer = document.getElementById('drawer-room-details');
 
-    const room = cart.room;
-    let baseRate = room.basePriceINR;
-    if (cart.ratePlan === 'breakfast') {
-      baseRate += room.breakfastAddonINR;
-    }
-
-    const roomSubtotal = baseRate * this.state.nights * this.state.rooms;
-    
-    // Addons
-    let addonsTotal = 0;
-    if (cart.addOns.airportTransfer) addonsTotal += 1500;
-    if (cart.addOns.candlelightDinner) addonsTotal += 2500;
-    if (cart.addOns.spaTherapy) addonsTotal += 3000;
-
-    let grossTotal = roomSubtotal + addonsTotal;
-
-    // Discount
-    let discountAmount = 0;
-    if (this.state.discountPercent > 0) {
-      discountAmount = Math.round((grossTotal * this.state.discountPercent) / 100);
-    }
-
-    const netBeforeTax = grossTotal - discountAmount;
-    const taxesAndGST = Math.round(netBeforeTax * 0.12); // 12% GST
-    const finalPayable = netBeforeTax + taxesAndGST;
-
-    // Render Drawer Content
-    const drawerContainer = document.getElementById('booking-drawer-content');
-    if (!drawerContainer) return;
-
-    drawerContainer.innerHTML = `
-      <div class="cart-room-summary mb-4" style="background: var(--color-surface-warm); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--color-border-solid);">
+    if (room && detailsContainer) {
+      detailsContainer.innerHTML = `
         <div style="display: flex; gap: 14px; align-items: center;">
-          <img src="${room.image}" alt="${room.name}" style="width: 84px; height: 84px; object-fit: cover; border-radius: var(--radius-sm);">
+          <img src="${room.image}" alt="${room.name}" style="width: 74px; height: 74px; border-radius: var(--radius-sm); object-fit: cover;">
           <div>
-            <h4 style="margin-bottom: 2px;">${room.name}</h4>
-            <span class="badge-gold" style="font-size: 0.68rem;">${cart.ratePlan === 'breakfast' ? 'Breakfast Included' : 'Room Only'}</span>
-            <div style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 4px;">
-              ${this.state.nights} Night(s) × ${this.state.rooms} Room(s) | ${this.state.adults} Adults
-            </div>
+            <h4 style="margin: 0 0 4px 0; font-size: 1.05rem;">${room.name}</h4>
+            <div style="font-size: 0.78rem; color: var(--color-text-muted);">${room.sizeSqFt} sq ft &bull; ${room.bedType}</div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary-gold); margin-top: 4px;">${this.formatPrice(room.basePriceINR)} <small style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: normal;">/ night</small></div>
           </div>
         </div>
-      </div>
+      `;
+    }
 
-      <div class="cart-stay-dates mb-4" style="font-size: 0.88rem; background: #fff; padding: 14px; border: 1px solid var(--color-border-solid); border-radius: var(--radius-sm);">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span>Check-in:</span>
-          <strong>${this.state.checkInDate} (From 2:00 PM)</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span>Check-out:</span>
-          <strong>${this.state.checkOutDate} (By 12:00 PM)</strong>
-        </div>
-      </div>
+    // Itinerary values
+    const checkinEl = document.getElementById('booking-checkin');
+    const checkoutEl = document.getElementById('booking-checkout');
+    if (checkinEl) this.state.checkInDate = checkinEl.value || this.state.checkInDate;
+    if (checkoutEl) this.state.checkOutDate = checkoutEl.value || this.state.checkOutDate;
 
-      <div class="cart-addons-section mb-4">
-        <h4 style="font-size: 1.05rem; margin-bottom: 12px;">Enhance Your 5-Star Stay</h4>
-        
-        <label class="addon-option-label" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--color-surface-warm); border-radius: var(--radius-sm); margin-bottom: 8px; cursor: pointer;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <input type="checkbox" id="addon-airport" ${cart.addOns.airportTransfer ? 'checked' : ''} onchange="BookingEngine.toggleAddon('airportTransfer')">
-            <span style="font-size: 0.88rem;">Chauffeured Airport Transfer</span>
-          </div>
-          <strong style="color: var(--color-primary-gold);">${this.formatPrice(1500)}</strong>
-        </label>
+    // Calculate nights
+    if (this.state.checkInDate && this.state.checkOutDate) {
+      const d1 = new Date(this.state.checkInDate);
+      const d2 = new Date(this.state.checkOutDate);
+      const diffTime = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+      this.state.nights = isNaN(diffTime) ? 1 : diffTime;
+    }
 
-        <label class="addon-option-label" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--color-surface-warm); border-radius: var(--radius-sm); margin-bottom: 8px; cursor: pointer;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <input type="checkbox" id="addon-dinner" ${cart.addOns.candlelightDinner ? 'checked' : ''} onchange="BookingEngine.toggleAddon('candlelightDinner')">
-            <span style="font-size: 0.88rem;">Saffron 4-Course Candlelight Dinner</span>
-          </div>
-          <strong style="color: var(--color-primary-gold);">${this.formatPrice(2500)}</strong>
-        </label>
+    const drawerCheckinVal = document.getElementById('drawer-checkin-val');
+    const drawerCheckoutVal = document.getElementById('drawer-checkout-val');
+    const drawerNightsVal = document.getElementById('drawer-nights-val');
 
-        <label class="addon-option-label" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--color-surface-warm); border-radius: var(--radius-sm); cursor: pointer;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <input type="checkbox" id="addon-spa" ${cart.addOns.spaTherapy ? 'checked' : ''} onchange="BookingEngine.toggleAddon('spaTherapy')">
-            <span style="font-size: 0.88rem;">60-Min Ocean Spa Ayurvedic Therapy</span>
-          </div>
-          <strong style="color: var(--color-primary-gold);">${this.formatPrice(3000)}</strong>
-        </label>
-      </div>
+    if (drawerCheckinVal) drawerCheckinVal.textContent = this.state.checkInDate;
+    if (drawerCheckoutVal) drawerCheckoutVal.textContent = this.state.checkOutDate;
+    if (drawerNightsVal) drawerNightsVal.textContent = `${this.state.nights} Night${this.state.nights > 1 ? 's' : ''}`;
 
-      <div class="cart-promo-section mb-4">
-        <label class="form-label" style="font-size: 0.78rem;">Promo / Voucher Code</label>
-        <div style="display: flex; gap: 8px;">
-          <input type="text" id="cart-promo-input" class="form-control" placeholder="e.g. ROYAL10" value="${this.state.promoCode}" style="text-transform: uppercase;">
-          <button class="btn btn-dark btn-sm" onclick="BookingEngine.applyPromoCode()">Apply</button>
-        </div>
-        ${this.state.discountPercent > 0 ? `
-          <div style="color: var(--color-success); font-size: 0.8rem; margin-top: 6px;">
-            <i class="fa-solid fa-tag"></i> Coupon Applied: ${this.state.discountPercent}% Discount Granted!
-          </div>
-        ` : ''}
-      </div>
+    // Calculate financials
+    const roomRate = room ? room.basePriceINR : 0;
+    const roomSubtotal = roomRate * this.state.nights * this.state.rooms;
 
-      <div class="cart-price-breakdown" style="border-top: 1px solid var(--color-border-solid); padding-top: 16px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-          <span>Room Tariff (${this.state.nights} Night${this.state.nights > 1 ? 's' : ''})</span>
-          <span>${this.formatPrice(roomSubtotal)}</span>
-        </div>
-        ${addonsTotal > 0 ? `
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-            <span>Selected Experiences & Addons</span>
-            <span>${this.formatPrice(addonsTotal)}</span>
-          </div>
-        ` : ''}
-        ${discountAmount > 0 ? `
-          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--color-success);">
-            <span>Special Promotion Discount</span>
-            <span>-${this.formatPrice(discountAmount)}</span>
-          </div>
-        ` : ''}
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--color-text-muted);">
-          <span>Luxury GST & Service Taxes (12%)</span>
-          <span>${this.formatPrice(taxesAndGST)}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 2px solid var(--color-primary-gold); font-size: 1.25rem;">
-          <strong>Total Payable Amount</strong>
-          <strong style="color: var(--color-primary-gold); font-family: var(--font-serif);">${this.formatPrice(finalPayable)}</strong>
-        </div>
-      </div>
-    `;
+    let addonsTotal = 0;
+    if (this.state.cart.addOns.airportTransfer) addonsTotal += 1500;
+    if (this.state.cart.addOns.candlelightDinner) addonsTotal += 2500;
+    if (this.state.cart.addOns.spaTherapy) addonsTotal += 3000;
 
-    // Update Drawer Footer Checkout Button
-    const checkoutBtn = document.getElementById('drawer-checkout-btn');
-    if (checkoutBtn) {
-      checkoutBtn.onclick = () => this.openFinalReservationModal(finalPayable);
+    const discountAmount = (roomSubtotal * this.state.discountPercent) / 100;
+    const taxableSubtotal = (roomSubtotal - discountAmount) + addonsTotal;
+    const taxes = Math.round(taxableSubtotal * 0.18); // 18% GST
+    const grandTotal = taxableSubtotal + taxes;
+
+    // Update display elements
+    const subtotalEl = document.getElementById('price-room-subtotal');
+    const addonsEl = document.getElementById('price-addons-total');
+    const discountRow = document.getElementById('price-discount-row');
+    const discountValEl = document.getElementById('price-discount-val');
+    const taxesEl = document.getElementById('price-taxes-val');
+    const grandTotalEl = document.getElementById('price-grand-total');
+
+    if (subtotalEl) subtotalEl.textContent = this.formatPrice(roomSubtotal);
+    if (addonsEl) addonsEl.textContent = this.formatPrice(addonsTotal);
+    if (taxesEl) taxesEl.textContent = this.formatPrice(taxes);
+    if (grandTotalEl) grandTotalEl.textContent = this.formatPrice(grandTotal);
+
+    if (discountRow && discountValEl) {
+      if (this.state.discountPercent > 0) {
+        discountRow.style.display = 'flex';
+        discountValEl.textContent = `- ${this.formatPrice(discountAmount)} (${this.state.discountPercent}%)`;
+      } else {
+        discountRow.style.display = 'none';
+      }
     }
   },
 
-  toggleAddon(addonName) {
-    this.state.cart.addOns[addonName] = !this.state.cart.addOns[addonName];
-    this.updateCartCalculation();
+  finalizeBooking() {
+    this.submitReservation();
   },
 
-  applyPromoCode() {
-    const input = document.getElementById('cart-promo-input');
-    if (!input) return;
-
-    const code = input.value.trim().toUpperCase();
-    this.state.promoCode = code;
-
-    if (code === 'ROYAL10') {
-      this.state.discountPercent = 10;
-      this.showToast('Special 10% Royal Discount Applied!', 'success');
-    } else if (code === 'HONEYMOON') {
-      this.state.discountPercent = 15;
-      this.showToast('15% Honeymoon Package Applied!', 'success');
-    } else if (code === 'SPA20') {
-      this.state.discountPercent = 12;
-      this.showToast('12% Spa Weekend Discount Applied!', 'success');
-    } else if (code === '') {
-      this.state.discountPercent = 0;
-    } else {
-      this.state.discountPercent = 0;
-      this.showToast('Invalid Promo Code. Try ROYAL10', 'error');
+  submitReservation() {
+    const room = this.state.cart.room;
+    if (!room) {
+      this.showToast('Please select a room before confirming reservation.', 'warning');
+      return;
     }
 
-    this.updateCartCalculation();
-  },
+    const name = document.getElementById('checkout-guest-name')?.value || 'Valued Guest';
+    const email = document.getElementById('checkout-guest-email')?.value || 'guest@example.com';
+    const phone = document.getElementById('checkout-guest-phone')?.value || '+91 7061552455';
+    const bookingRef = `HPC-${Math.floor(100000 + Math.random() * 900000)}`;
 
-  openFinalReservationModal(payableTotal) {
     this.closeBookingDrawer();
-    const modal = document.getElementById('reservation-checkout-modal');
-    const totalDisplay = document.getElementById('reservation-total-val');
-    
-    if (totalDisplay) {
-      totalDisplay.textContent = this.formatPrice(payableTotal);
-    }
-    
-    if (modal) {
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-  },
 
-  submitReservation(e) {
-    e.preventDefault();
-    const name = document.getElementById('res-guest-name')?.value || 'Valued Guest';
-    const email = document.getElementById('res-guest-email')?.value || 'guest@example.com';
-    const phone = document.getElementById('res-guest-phone')?.value || '+91 9876543210';
-    const specialReq = document.getElementById('res-special-req')?.value || 'None';
-
-    const bookingRef = 'HPC-' + Math.floor(100000 + Math.random() * 900000);
-
-    this.closeModal('reservation-checkout-modal');
-
-    // Show Confirmation Pass Modal
     const passModal = document.getElementById('booking-confirmation-modal');
     const passContent = document.getElementById('confirmation-pass-content');
 
@@ -470,176 +485,95 @@ const BookingEngine = {
             <strong style="color: var(--color-primary-gold); font-size: 1.15rem; letter-spacing: 0.08em;">${bookingRef}</strong>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 0.88rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 0.88rem; margin-bottom: 14px;">
             <div>
-              <span style="color: var(--color-text-muted); display: block;">Accommodation:</span>
-              <strong>${this.state.cart.room?.name || 'Luxury Suite'}</strong>
+              <span style="color: var(--color-text-muted); display: block; font-size: 0.75rem;">Accommodation:</span>
+              <strong>${room.name}</strong>
             </div>
             <div>
-              <span style="color: var(--color-text-muted); display: block;">Rate Plan:</span>
-              <strong>${this.state.cart.ratePlan === 'breakfast' ? 'Bed & Breakfast' : 'Room Only'}</strong>
+              <span style="color: var(--color-text-muted); display: block; font-size: 0.75rem;">Total Rooms:</span>
+              <strong>${this.state.rooms} Room (${this.state.adults} Adults)</strong>
             </div>
             <div>
-              <span style="color: var(--color-text-muted); display: block;">Check-In:</span>
+              <span style="color: var(--color-text-muted); display: block; font-size: 0.75rem;">Check-In:</span>
               <strong>${this.state.checkInDate} (14:00)</strong>
             </div>
             <div>
-              <span style="color: var(--color-text-muted); display: block;">Check-Out:</span>
+              <span style="color: var(--color-text-muted); display: block; font-size: 0.75rem;">Check-Out:</span>
               <strong>${this.state.checkOutDate} (12:00)</strong>
             </div>
-            <div>
-              <span style="color: var(--color-text-muted); display: block;">Primary Guest:</span>
-              <strong>${name}</strong>
-            </div>
-            <div>
-              <span style="color: var(--color-text-muted); display: block;">Confirmation Sent To:</span>
-              <strong>${email}</strong>
-            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-border-solid); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 600;">Contact Email:</span>
+            <span>${email}</span>
           </div>
         </div>
 
-        <div style="display: flex; gap: 12px; justify-content: center;">
-          <button class="btn btn-gold" onclick="window.print()">
-            <i class="fa-solid fa-print"></i> Print Confirmation Pass
-          </button>
-          <button class="btn btn-outline-gold" onclick="BookingEngine.closeModal('booking-confirmation-modal')">
-            Done
-          </button>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-outline-gold" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Voucher</button>
+          <a href="https://wa.me/917061552455?text=Hello%20Hotel%20Patliputra%20Continental%2C%20my%20booking%20reference%20is%20${bookingRef}%20for%20${encodeURIComponent(room.name)}." target="_blank" class="btn btn-gold"><i class="fa-brands fa-whatsapp"></i> WhatsApp Concierge</a>
         </div>
       `;
 
       passModal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      this.showToast(`Booking ${bookingRef} created successfully!`, 'success');
-    }
-  },
-
-  renderGuestCountDisplay() {
-    const display = document.getElementById('guest-display-text');
-    if (display) {
-      display.textContent = `${this.state.adults} Adult${this.state.adults > 1 ? 's' : ''}${this.state.children > 0 ? `, ${this.state.children} Child` : ''}, ${this.state.rooms} Room`;
-    }
-
-    const adultsVal = document.getElementById('counter-adults-val');
-    const childrenVal = document.getElementById('counter-children-val');
-    const roomsVal = document.getElementById('counter-rooms-val');
-
-    if (adultsVal) adultsVal.textContent = this.state.adults;
-    if (childrenVal) childrenVal.textContent = this.state.children;
-    if (roomsVal) roomsVal.textContent = this.state.rooms;
-  },
-
-  updateGuestCount(type, delta) {
-    if (type === 'adults') {
-      this.state.adults = Math.max(1, Math.min(8, this.state.adults + delta));
-    } else if (type === 'children') {
-      this.state.children = Math.max(0, Math.min(6, this.state.children + delta));
-    } else if (type === 'rooms') {
-      this.state.rooms = Math.max(1, Math.min(4, this.state.rooms + delta));
-    }
-
-    this.renderGuestCountDisplay();
-    if (this.state.cart.room) {
-      this.updateCartCalculation();
     }
   },
 
   showToast(message, type = 'info') {
-    let container = document.getElementById('toast-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.id = 'toast-container';
-      container.className = 'toast-container';
-      document.body.appendChild(container);
-    }
+    const container = document.getElementById('toast-container');
+    if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     toast.innerHTML = `
-      <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-info'}" style="color: ${type === 'success' ? 'var(--color-success)' : 'var(--color-primary-gold)'};"></i>
+      <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : type === 'warning' ? 'fa-triangle-exclamation' : 'fa-circle-info'}"></i>
       <span>${message}</span>
     `;
 
     container.appendChild(toast);
+    setTimeout(() => toast.classList.add('show'), 10);
     setTimeout(() => {
-      toast.remove();
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 400);
     }, 4500);
   },
 
   bindEvents() {
-    // Checkin / Checkout date pickers
-    const checkInInput = document.getElementById('booking-checkin');
-    const checkOutInput = document.getElementById('booking-checkout');
+    // Guest dropdown toggler
+    const guestBtn = document.getElementById('guest-selector-btn') || document.getElementById('guest-picker-trigger');
+    const guestDropdown = document.getElementById('guest-dropdown-menu') || document.getElementById('guest-picker-dropdown');
 
-    if (checkInInput && checkOutInput) {
-      checkInInput.addEventListener('change', (e) => {
-        this.state.checkInDate = e.target.value;
-        checkOutInput.min = e.target.value;
-        const d1 = new Date(this.state.checkInDate);
-        const d2 = new Date(this.state.checkOutDate);
-        const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-        this.state.nights = diffDays;
-        if (this.state.cart.room) this.updateCartCalculation();
-      });
-
-      checkOutInput.addEventListener('change', (e) => {
-        this.state.checkOutDate = e.target.value;
-        const d1 = new Date(this.state.checkInDate);
-        const d2 = new Date(this.state.checkOutDate);
-        const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-        this.state.nights = diffDays;
-        if (this.state.cart.room) this.updateCartCalculation();
-      });
-    }
-
-    // Guest dropdown toggle
-    const guestTrigger = document.getElementById('guest-picker-trigger');
-    const guestDropdown = document.getElementById('guest-picker-dropdown');
-
-    if (guestTrigger && guestDropdown) {
-      guestTrigger.addEventListener('click', (e) => {
+    if (guestBtn && guestDropdown) {
+      guestBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         guestDropdown.classList.toggle('show');
       });
 
       document.addEventListener('click', (e) => {
-        if (!e.target.closest('#guest-picker-dropdown') && !e.target.closest('#guest-picker-trigger')) {
+        if (!guestDropdown.contains(e.target) && e.target !== guestBtn) {
           guestDropdown.classList.remove('show');
         }
       });
     }
 
-    // Modal Close Triggers
-    document.querySelectorAll('.modal-close-trigger').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const modal = e.target.closest('.modal-overlay');
-        if (modal) modal.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-    });
+    // Date change listeners
+    const checkin = document.getElementById('booking-checkin');
+    const checkout = document.getElementById('booking-checkout');
 
-    // Drawer Close
-    const drawerCloseBtn = document.getElementById('booking-drawer-close');
-    if (drawerCloseBtn) {
-      drawerCloseBtn.addEventListener('click', () => this.closeBookingDrawer());
+    if (checkin) {
+      checkin.addEventListener('change', () => {
+        this.state.checkInDate = checkin.value;
+        if (checkout) checkout.min = checkin.value;
+        this.updateCartCalculation();
+      });
     }
 
-    // Category Tabs
-    document.querySelectorAll('.room-filter-tab').forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        document.querySelectorAll('.room-filter-tab').forEach(t => t.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-        const cat = e.currentTarget.getAttribute('data-category') || 'all';
-        this.renderRooms(cat);
-      });
-    });
-
-    // Booking search button
-    const searchBtn = document.getElementById('booking-search-btn');
-    if (searchBtn) {
-      searchBtn.addEventListener('click', () => {
-        document.getElementById('rooms-section')?.scrollIntoView({ behavior: 'smooth' });
-        this.showToast(`Showing luxury rooms for ${this.state.nights} Night(s) (${this.state.adults} Adults)`, 'info');
+    if (checkout) {
+      checkout.addEventListener('change', () => {
+        this.state.checkOutDate = checkout.value;
+        this.updateCartCalculation();
       });
     }
   }

@@ -2,124 +2,121 @@
  * Hotel Patliputra Continental - Dining & Digital Gastronomy Styles
  */
 
-.dining-venues-list {
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
+/* ==========================================================================
+   Dining 3-Card Grid (Saffron, Chao China, Coca Mocha)
+   ========================================================================== */
+.dining-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
 }
 
-.dining-venue-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.dining-card {
   background: #ffffff;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-card);
   border: 1px solid var(--color-border-solid);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
 }
 
-.dining-venue-card.reversed {
-  direction: rtl;
+.dining-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(197, 155, 39, 0.4);
 }
 
-.dining-venue-card.reversed > * {
-  direction: ltr;
-}
-
-.dining-venue-img-wrap {
+.dining-card-img-wrap {
   position: relative;
-  min-height: 420px;
+  height: 240px;
   overflow: hidden;
 }
 
-.dining-venue-img {
+.dining-card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.8s ease;
 }
 
-.dining-venue-card:hover .dining-venue-img {
-  transform: scale(1.05);
+.dining-card:hover .dining-card-img {
+  transform: scale(1.08);
 }
 
-.dining-venue-content {
-  padding: 44px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.dining-cuisine-tag {
+.dining-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--color-gold-gradient);
+  color: #0b0f17;
   font-family: var(--font-accent);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dining-card-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dining-cuisine-label {
+  font-family: var(--font-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   color: var(--color-primary-gold);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  display: block;
 }
 
 .dining-venue-title {
-  font-size: 2.2rem;
-  margin-bottom: 12px;
+  font-size: 1.6rem;
+  margin-bottom: 10px;
   color: var(--color-text-main);
+  letter-spacing: 0.02em;
 }
 
 .dining-venue-desc {
-  font-size: 0.98rem;
-  line-height: 1.7;
+  font-size: 0.92rem;
+  line-height: 1.65;
   color: var(--color-text-muted);
-  margin-bottom: 24px;
-}
-
-.dining-highlights-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.dining-highlight-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--color-text-main);
-}
-
-.dining-highlight-item i {
-  color: var(--color-primary-gold);
+  margin-bottom: 20px;
+  flex: 1;
 }
 
 .dining-meta-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 14px 0;
-  border-top: 1px solid var(--color-border-solid);
-  border-bottom: 1px solid var(--color-border-solid);
-  margin-bottom: 28px;
-  font-size: 0.85rem;
-}
-
-.dining-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  background: var(--color-surface-warm);
+  border: 1px solid var(--color-border-solid);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 0.82rem;
   color: var(--color-text-muted);
-}
-
-.dining-meta-item strong {
-  color: var(--color-text-main);
-}
-
-.dining-actions-row {
   display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.dining-card-actions {
+  display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
+}
+
+.dining-card-actions .btn {
+  flex: 1;
+  text-align: center;
+  justify-content: center;
 }
 
 /* ==========================================================================
