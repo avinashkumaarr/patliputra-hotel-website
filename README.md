@@ -110,8 +110,8 @@ To run this project locally on your machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/hotel-patliputra-website.git
-   cd hotel-patliputra-website
+   git clone https://github.com/avinashkumaarr/patliputra-hotel-website.git
+   cd patliputra-hotel-website
    ```
 
 2. **Start a local development server:**
