@@ -233,12 +233,13 @@ const App = {
       <div class="destination-card">
         <div class="destination-img-wrap" onclick="GalleryModal.openLightbox('${dest.image}', '${dest.name}')" style="cursor: pointer;">
           <img src="${dest.image}" alt="${dest.name}" class="destination-img" loading="lazy">
-          <span class="destination-distance-badge">
-            <i class="fa-solid fa-location-dot" style="color: var(--color-primary-gold);"></i> ${dest.distance} (${dest.travelTime})
+          <span class="destination-dist-badge">
+            <i class="fa-solid fa-location-dot"></i> ${dest.distance} &bull; ${dest.travelTime}
           </span>
         </div>
-        <div class="destination-card-body">
-          <h3 class="destination-name">${dest.name}</h3>
+        <div class="destination-body">
+          <h3 class="destination-title">${dest.name}</h3>
+          <span class="destination-time"><i class="fa-solid fa-car"></i> ${dest.travelTime} from Hotel</span>
           <p class="destination-desc">${dest.description}</p>
         </div>
       </div>

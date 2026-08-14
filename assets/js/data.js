@@ -414,7 +414,7 @@ const HOTEL_DATA = {
       name: "Patna Museum (Jadu Ghar)",
       distance: "7 km from Hotel",
       travelTime: "18 min drive",
-      image: "assets/img/destinations/patna-museum.webp",
+      image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&w=1200&q=85",
       description: "State museum showcasing Mughal and Rajput architecture, the famed Didarganj Yakshi statue, and an ancient fossilized tree trunk."
     },
     {
@@ -422,7 +422,7 @@ const HOTEL_DATA = {
       name: "Mahavir Mandir",
       distance: "6 km from Hotel",
       travelTime: "15 min drive",
-      image: "assets/img/destinations/mahavir-mandir.webp",
+      image: "https://images.unsplash.com/photo-1609766857329-87a3875323a6?auto=format&fit=crop&w=1200&q=85",
       description: "One of the holiest and most visited Hanuman temples in North India, situated right next to Patna Junction railway station."
     },
     {
@@ -430,7 +430,7 @@ const HOTEL_DATA = {
       name: "Takht Sri Harmandir Ji (Patna Sahib)",
       distance: "14 km from Hotel",
       travelTime: "30 min drive",
-      image: "assets/img/destinations/takht-patna-sahib.webp",
+      image: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=1200&q=85",
       description: "One of the five sacred Takhts of Sikhism, commemorating the birthplace of Guru Gobind Singh Ji in 1666, built with white marble and intricate gold work."
     },
     {
@@ -438,7 +438,7 @@ const HOTEL_DATA = {
       name: "Nalanda Mahavihara (UNESCO)",
       distance: "82 km from Hotel",
       travelTime: "1 hr 45 min drive",
-      image: "assets/img/destinations/nalanda.webp",
+      image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=85",
       description: "UNESCO World Heritage ancient residential university active from 5th to 13th centuries CE, renowned worldwide for Buddhist philosophy and learning."
     }
   ]

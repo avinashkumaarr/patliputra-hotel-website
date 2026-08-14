@@ -478,13 +478,13 @@ ul, ol { list-style: none; }
 }
 
 /* ==========================================================================
-   5. Hero Section & 4-Pillar Luxury Ribbon
+   5. Hero Section & 4-Pillar Luxury Ribbon Strip
    ========================================================================== */
 .hero-section {
   position: relative;
-  height: calc(100vh - 120px);
-  min-height: 640px;
-  max-height: 880px;
+  height: 78vh;
+  min-height: 540px;
+  max-height: 720px;
   overflow: hidden;
   background-color: var(--color-bg-dark);
 }
@@ -515,7 +515,7 @@ ul, ol { list-style: none; }
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: brightness(0.95) contrast(1.08) saturate(1.15);
+  filter: brightness(0.92) contrast(1.08) saturate(1.15);
   transform: scale(1);
   transition: transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -527,7 +527,7 @@ ul, ol { list-style: none; }
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(10, 13, 20, 0.5) 0%, rgba(10, 13, 20, 0.3) 50%, rgba(10, 13, 20, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(10, 13, 20, 0.5) 0%, rgba(10, 13, 20, 0.3) 50%, rgba(10, 13, 20, 0.8) 100%);
   z-index: 5;
 }
 
@@ -538,7 +538,7 @@ ul, ol { list-style: none; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-bottom: 90px;
+  padding-bottom: 50px;
 }
 
 .hero-content {
@@ -578,62 +578,6 @@ ul, ol { list-style: none; }
   flex-wrap: wrap;
 }
 
-.hero-ribbon {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 15;
-  background: rgba(10, 13, 20, 0.92);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(197, 155, 39, 0.3);
-  padding: 16px 0;
-}
-
-.hero-ribbon-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.hero-ribbon-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.ribbon-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(197, 155, 39, 0.15);
-  border: 1px solid rgba(197, 155, 39, 0.3);
-  color: var(--color-primary-gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.ribbon-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.ribbon-text strong {
-  font-family: var(--font-accent);
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.04em;
-}
-
-.ribbon-text span {
-  font-size: 0.72rem;
-  color: #94a3b8;
-}
-
 .hero-nav-arrow {
   position: absolute;
   top: 50%;
@@ -664,7 +608,7 @@ ul, ol { list-style: none; }
 
 .hero-dots {
   position: absolute;
-  bottom: 85px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -687,6 +631,60 @@ ul, ol { list-style: none; }
   background: var(--color-primary-gold);
 }
 
+/* 4-Pillar Dedicated Luxury Ribbon Bar */
+.hero-ribbon-bar {
+  background: #0d121c;
+  border-top: 1px solid rgba(197, 155, 39, 0.25);
+  border-bottom: 1px solid rgba(197, 155, 39, 0.25);
+  padding: 24px 0;
+  position: relative;
+  z-index: 20;
+}
+
+.hero-ribbon-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.hero-ribbon-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ribbon-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(197, 155, 39, 0.15);
+  border: 1px solid rgba(197, 155, 39, 0.35);
+  color: var(--color-primary-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.ribbon-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ribbon-text strong {
+  font-family: var(--font-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.ribbon-text span {
+  font-size: 0.74rem;
+  color: #94a3b8;
+}
+
 /* ==========================================================================
    6. Floating Booking Bar Card & Controls
    ========================================================================== */
@@ -694,6 +692,7 @@ ul, ol { list-style: none; }
   position: relative;
   z-index: 40;
   margin-top: -45px;
+  margin-bottom: 28px;
   padding: 0 16px;
 }
 
@@ -701,7 +700,7 @@ ul, ol { list-style: none; }
   background: #ffffff;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border-solid);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.14), 0 5px 15px rgba(0, 0, 0, 0.06);
   overflow: visible;
 }
 
@@ -874,9 +873,10 @@ ul, ol { list-style: none; }
 
 .room-card-image-wrap {
   position: relative;
-  height: 260px;
+  height: 250px;
   overflow: hidden;
   cursor: pointer;
+  background: #121824;
 }
 
 .room-card-image {
@@ -892,8 +892,8 @@ ul, ol { list-style: none; }
 
 .room-card-badge {
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 14px;
+  left: 14px;
   z-index: 5;
 }
 
@@ -979,11 +979,12 @@ ul, ol { list-style: none; }
 .room-pricing {
   display: flex;
   flex-direction: column;
+  min-width: 130px;
 }
 
 .room-price-label {
   font-family: var(--font-accent);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -995,18 +996,28 @@ ul, ol { list-style: none; }
   font-size: 1.45rem;
   font-weight: 700;
   color: var(--color-primary-gold);
-  line-height: 1.1;
-  margin: 2px 0;
+  line-height: 1.15;
+  margin: 3px 0 1px 0;
+  white-space: nowrap;
 }
 
 .room-price-unit {
   font-size: 0.72rem;
   color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
 .room-card-actions {
   display: flex;
   gap: 8px;
+}
+
+.room-card-actions .btn {
+  padding: 9px 12px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -1151,6 +1162,7 @@ ul, ol { list-style: none; }
   position: relative;
   height: 220px;
   overflow: hidden;
+  background: #121824;
 }
 
 .banquet-card-img {
@@ -1166,20 +1178,22 @@ ul, ol { list-style: none; }
 
 .banquet-cap-badge {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
+  top: 14px;
+  left: 14px;
   background: rgba(10, 13, 20, 0.85);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(197, 155, 39, 0.4);
   color: #fff;
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: var(--radius-full);
   font-family: var(--font-accent);
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .banquet-cap-badge i {
@@ -1197,6 +1211,37 @@ ul, ol { list-style: none; }
   font-size: 1.35rem;
   margin-bottom: 4px;
   color: var(--color-text-main);
+}
+
+.banquet-ideal {
+  font-size: 0.84rem;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+
+.banquet-desc {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.banquet-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.banquet-card-actions .btn {
+  flex: 1;
+  padding: 10px 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .banquet-desc {

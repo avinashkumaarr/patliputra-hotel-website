@@ -128,10 +128,10 @@ const BookingEngine = {
 
             <div class="room-card-actions">
               <button class="btn btn-outline-gold btn-sm" onclick="BookingEngine.openRoomDetails('${room.id}')">
-                Explore Room &rarr;
+                Explore &rarr;
               </button>
               <button class="btn btn-gold btn-sm" onclick="BookingEngine.selectRoomForBooking('${room.id}')">
-                Check Availability &rarr;
+                Reserve &rarr;
               </button>
             </div>
           </div>
