@@ -129,25 +129,30 @@ const App = {
   initMobileDrawer() {
     const toggleBtn = document.getElementById('mobile-menu-toggle');
     const drawer = document.getElementById('mobile-nav-drawer');
+    const overlay = document.getElementById('mobile-nav-overlay');
     const closeBtn = document.getElementById('mobile-drawer-close-btn');
 
-    if (toggleBtn && drawer) {
-      toggleBtn.addEventListener('click', () => {
-        drawer.classList.add('active');
-      });
-    }
+    const openDrawer = () => {
+      if (drawer) drawer.classList.add('active');
+      if (overlay) overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
 
-    if (closeBtn && drawer) {
-      closeBtn.addEventListener('click', () => {
-        drawer.classList.remove('active');
-      });
-    }
+    const closeDrawer = () => {
+      if (drawer) drawer.classList.remove('active');
+      if (overlay) overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    if (toggleBtn) toggleBtn.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (overlay) overlay.addEventListener('click', closeDrawer);
 
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        if (drawer) drawer.classList.remove('active');
-      });
+      link.addEventListener('click', closeDrawer);
     });
+
+    this.closeMobileDrawer = closeDrawer;
   },
 
   /* ==========================================================================

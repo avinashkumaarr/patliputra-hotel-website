@@ -1257,25 +1257,157 @@ ul, ol { list-style: none; }
   gap: 10px;
 }
 
-.banquet-card-actions .btn {
+/* ==========================================================================
+   10. Event Categories, Wellness, Amenities, About & Destinations
+   ========================================================================== */
+.event-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.event-category-card {
+  background: #ffffff;
+  padding: 28px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-solid);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+}
+
+.event-category-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(197, 155, 39, 0.4);
+}
+
+.event-cat-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(197, 155, 39, 0.12);
+  color: var(--color-primary-gold);
+  font-size: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+}
+
+.event-cat-title {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--color-text-main);
+}
+
+.event-cat-desc {
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
   flex: 1;
 }
 
-/* ==========================================================================
-   10. Wellness, Amenities, About & Destinations
-   ========================================================================== */
+/* Wellness Section */
+.wellness-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+}
+
 .wellness-card {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border-solid);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
   transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
 }
 
 .wellness-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-hover);
+  border-color: rgba(197, 155, 39, 0.4);
 }
 
+.wellness-img-wrap {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  background: #121824;
+}
+
+.wellness-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.wellness-card:hover .wellness-img {
+  transform: scale(1.08);
+}
+
+.wellness-hours-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(10, 13, 20, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(197, 155, 39, 0.4);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.wellness-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.wellness-title {
+  font-size: 1.25rem;
+  margin-bottom: 4px;
+  color: var(--color-text-main);
+}
+
+.wellness-tagline {
+  color: var(--color-primary-gold);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.wellness-desc {
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+.wellness-inclusion {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: auto;
+}
+
+/* Amenities Grid */
 .amenities-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 32px;
 }
 
@@ -1319,6 +1451,109 @@ ul, ol { list-style: none; }
   font-size: 1rem;
 }
 
+/* About Section */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.about-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  margin-bottom: 16px;
+  color: var(--color-text-main);
+}
+
+.about-lead {
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.about-desc {
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.about-highlights-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.about-highlight-item {
+  border-left: 3px solid var(--color-primary-gold);
+  padding-left: 14px;
+}
+
+.about-highlight-item strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--color-text-main);
+  margin-bottom: 2px;
+}
+
+.about-highlight-item span {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  display: block;
+}
+
+.about-cta-group {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.about-image-wrapper {
+  position: relative;
+}
+
+.about-img-frame {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--color-primary-gold);
+  background: #121824;
+}
+
+.about-img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
+
+.about-address-badge {
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  background: var(--color-primary-dark);
+  color: #fff;
+  padding: 18px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-primary-gold);
+  box-shadow: var(--shadow-md);
+  max-width: calc(100% - 20px);
+}
+
+.about-badge-title {
+  font-family: var(--font-accent);
+  font-weight: 700;
+  color: var(--color-gold-bright);
+  font-size: 1.15rem;
+}
+
+.about-badge-sub {
+  font-size: 0.85rem;
+  color: var(--color-text-light-muted);
+}
+
 /* Destinations Guide */
 .destinations-grid {
   display: grid;
@@ -1348,6 +1583,7 @@ ul, ol { list-style: none; }
   height: 220px;
   overflow: hidden;
   cursor: pointer;
+  background: #121824;
 }
 
 .destination-img {
@@ -1377,6 +1613,7 @@ ul, ol { list-style: none; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .destination-dist-badge i {
@@ -1414,6 +1651,95 @@ ul, ol { list-style: none; }
 /* ==========================================================================
    11. Contact Form Controls & Footer
    ========================================================================== */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+}
+
+.contact-info-card, .contact-form-card {
+  background: #ffffff;
+  padding: 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-solid);
+  box-shadow: var(--shadow-sm);
+}
+
+.contact-card-title {
+  font-size: 1.45rem;
+  margin-bottom: 16px;
+  color: var(--color-text-main);
+}
+
+.contact-card-desc {
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 20px;
+}
+
+.contact-detail-row {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.contact-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(197, 155, 39, 0.1);
+  color: var(--color-primary-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.contact-detail-row strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  margin-bottom: 2px;
+}
+
+.contact-detail-row span {
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  display: block;
+}
+
+.contact-actions-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.form-group-mb {
+  margin-bottom: 16px;
+}
+
+.form-field-label {
+  font-family: var(--font-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-text-main);
+}
+
 .form-control {
   width: 100%;
   padding: 11px 14px;
@@ -1556,15 +1882,15 @@ ul, ol { list-style: none; }
   position: fixed;
   bottom: 28px;
   right: 28px;
-  width: 60px;
-  height: 60px;
+  width: 58px;
+  height: 58px;
   background: #25D366;
   color: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 1.9rem;
   box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45);
   z-index: 999;
   transition: transform var(--transition-bounce), box-shadow var(--transition-fast);
@@ -1748,6 +2074,7 @@ ul, ol { list-style: none; }
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-modal);
   width: 100%;
+  max-width: 620px;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
@@ -1795,7 +2122,7 @@ ul, ol { list-style: none; }
 
 .room-amenities-matrix {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 10px;
 }
 
@@ -1818,7 +2145,7 @@ ul, ol { list-style: none; }
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 24px;
 }
 
 .gallery-lightbox.active {
@@ -1833,9 +2160,11 @@ ul, ol { list-style: none; }
 
 .lightbox-content img {
   max-height: 80vh;
+  max-width: 100%;
   width: auto;
   border-radius: var(--radius-sm);
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+  object-fit: contain;
 }
 
 .lightbox-caption {
@@ -1893,81 +2222,415 @@ ul, ol { list-style: none; }
 .toast-warning { border-left-color: var(--color-warning); }
 
 /* Mobile Navigation Drawer */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 2004;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-smooth);
+}
+
+.mobile-nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 .mobile-nav-drawer {
   position: fixed;
   top: 0;
-  left: -320px;
-  width: 300px;
+  left: -340px;
+  width: 320px;
+  max-width: 86vw;
   height: 100vh;
-  background: var(--color-primary-dark);
+  background: #090d15;
   z-index: 2005;
-  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   transition: left var(--transition-smooth);
+  border-right: 1px solid rgba(197, 155, 39, 0.3);
 }
 
 .mobile-nav-drawer.active {
   left: 0;
 }
 
-.mobile-nav-header {
-  padding: 20px;
+.mobile-drawer-header {
+  padding: 20px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(197, 155, 39, 0.2);
+  background: #06090e;
 }
 
-.mobile-nav-links {
-  padding: 20px;
+.mobile-drawer-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+.mobile-drawer-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.mobile-drawer-close:hover {
+  background: var(--color-primary-gold);
+  color: #0b0f17;
+}
+
+.mobile-drawer-body {
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   flex: 1;
   overflow-y: auto;
+}
+
+.mobile-nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
 }
 
 .mobile-nav-link {
   color: #e2e8f0;
   font-family: var(--font-accent);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  text-decoration: none;
 }
 
-.mobile-drawer-footer {
-  padding: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+.mobile-nav-link i {
+  color: var(--color-primary-gold);
+  width: 20px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.mobile-nav-link:hover, .mobile-nav-link:active {
+  background: rgba(197, 155, 39, 0.15);
+  color: var(--color-gold-bright);
+}
+
+.mobile-drawer-cta-wrap {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-drawer-info {
+  margin-top: 18px;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 /* ==========================================================================
-   14. Responsive Layout Breakpoints
+   14. Master Responsive Layout Breakpoints
    ========================================================================== */
+
+/* Large Tablets & Small Laptops (<= 1024px) */
 @media (max-width: 1024px) {
   .nav-menu { display: none; }
-  .mobile-nav-toggle { display: block; }
-  .booking-bar-form { grid-template-columns: 1fr 1fr; }
-  .booking-submit-wrap { grid-column: span 2; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-  .hero-ribbon-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-  .about-grid { grid-template-columns: 1fr !important; }
+  .mobile-nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .booking-bar-form {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .booking-submit-wrap {
+    grid-column: span 2;
+  }
+
+  .hero-ribbon-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .rooms-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .dining-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .banquets-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .destinations-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .about-img {
+    height: 360px;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
 }
 
+/* Medium Tablets & Large Phones (<= 768px) */
 @media (max-width: 768px) {
-  .utility-hide-mobile { display: none; }
-  .hero-section { min-height: 580px; }
-  .hero-nav-arrow { display: none; }
-  .booking-bar-form { grid-template-columns: 1fr; }
-  .booking-submit-wrap { grid-column: span 1; }
-  .rooms-grid, .dining-cards-grid, .banquets-grid, .destinations-grid {
-    grid-template-columns: 1fr;
+  .top-utility-bar {
+    padding: 6px 0;
   }
-  .footer-grid { grid-template-columns: 1fr; }
-  .footer-bottom-strip { flex-direction: column; text-align: center; }
-  .hero-ribbon-grid { grid-template-columns: 1fr; }
+  .utility-left .utility-item:not(:first-child) {
+    display: none;
+  }
+  .utility-right .utility-item:not(.currency-toggle-wrap) {
+    display: none;
+  }
+
+  .main-header {
+    height: auto;
+  }
+  .navbar-container {
+    height: 68px;
+  }
+  .brand-logo-img {
+    height: 42px;
+  }
+
+  .hero-section {
+    height: auto;
+    min-height: 520px;
+    padding: 70px 0 50px 0;
+  }
+  .hero-content-container {
+    padding-bottom: 30px;
+  }
+  .hero-title {
+    font-size: clamp(2rem, 6.5vw, 3.2rem);
+    margin-bottom: 16px;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .hero-nav-arrow {
+    display: none;
+  }
+  .hero-dots {
+    bottom: 16px;
+  }
+
+  .booking-bar-section {
+    margin-top: -30px;
+    margin-bottom: 24px;
+    padding: 0 12px;
+  }
+  .booking-bar-form {
+    grid-template-columns: 1fr;
+    padding: 18px 16px;
+    gap: 14px;
+  }
+  .booking-submit-wrap {
+    grid-column: span 1;
+  }
+
+  .hero-ribbon-bar {
+    padding: 20px 0;
+  }
+  .hero-ribbon-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .ribbon-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  .ribbon-text strong {
+    font-size: 0.78rem;
+  }
+  .ribbon-text span {
+    font-size: 0.7rem;
+  }
+
+  .room-filter-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 10px 14px 10px;
+    scrollbar-width: none;
+  }
+  .room-filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .room-filter-tabs .tab-btn {
+    white-space: nowrap;
+    padding: 8px 16px;
+    font-size: 0.75rem;
+  }
+
+  .rooms-grid, .dining-cards-grid, .banquets-grid, .destinations-grid, .wellness-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .room-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .room-card-actions {
+    width: 100%;
+    display: flex;
+  }
+  .room-card-actions .btn {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .about-address-badge {
+    position: static;
+    margin-top: 14px;
+    max-width: 100%;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .footer-bottom-strip {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+}
+
+/* Small Mobile Phones (<= 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .navbar-container {
+    height: 62px;
+  }
+  .brand-logo-img {
+    height: 36px;
+  }
+  .nav-actions .btn-gold {
+    padding: 7px 10px;
+    font-size: 0.7rem;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-cta-group .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .hero-ribbon-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .section {
+    padding: 60px 0;
+  }
+  .section-header {
+    margin-bottom: 32px;
+  }
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .form-row-2col {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .contact-info-card, .contact-form-card {
+    padding: 22px 18px;
+  }
+
+  .contact-actions-row {
+    flex-direction: column;
+  }
+  .contact-actions-row .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .floating-whatsapp-btn {
+    bottom: 18px;
+    right: 18px;
+    width: 52px;
+    height: 52px;
+    font-size: 1.7rem;
+  }
+  .whatsapp-tooltip {
+    display: none;
+  }
+
+  .modal-overlay {
+    padding: 10px;
+  }
+  .modal-body {
+    padding: 18px 16px;
+  }
+  .modal-header {
+    padding: 16px 18px;
+  }
 }
